@@ -2,7 +2,10 @@
 import games.perses.game.DrawMode
 import games.perses.game.Game
 import games.perses.game.Screen
+import games.perses.text.Texts
 import kotlin.browser.document
+import kotlin.js.Math.max
+import kotlin.js.Math.min
 
 /**
  * User: rnentjes
@@ -12,6 +15,7 @@ import kotlin.browser.document
 
 class JuliaScreen : Screen() {
     val julia = Julia(Game.html)
+    var time = 0f
 
     override fun loadResources() {
     }
@@ -20,12 +24,14 @@ class JuliaScreen : Screen() {
     }
 
     override fun update(time: Float, delta: Float) {
+        this.time = time
     }
 
     override fun render() {
         julia.render()
 
-        //Texts.drawText(300f, Game.view.height / 2f, "Hello Kudens!", font = "bold 62pt Arial", fillStyle = "rgba(255,255,0,0.75)")
+        val alpha = max(0f, min(0.75f, 4f - time))
+        Texts.drawText(20f, 20f, "Press F5 for another zen moment.", font = "bold 22pt Arial", fillStyle = "rgba(255,255,255,$alpha)")
     }
 
 }
