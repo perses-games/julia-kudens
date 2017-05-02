@@ -1,1 +1,1 @@
-Here it is, your [random moment of zen](https://julia.perses.games).
+Here it is, your [random moment of zen](http://julia.perses.games).
