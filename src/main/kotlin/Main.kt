@@ -31,7 +31,7 @@ class JuliaScreen : Screen() {
         julia.render()
 
         val alpha = max(0f, min(0.75f, 4f - time))
-        Texts.drawText(20f, 20f, "Press F5 for another zen moment.", font = "bold 22pt Arial", fillStyle = "rgba(255,255,255,$alpha)")
+        Texts.drawText(20f, 20f, "Press F5 for another moment of zen.", font = "bold 22pt Arial", fillStyle = "rgba(255,255,255,$alpha)")
     }
 
 }
