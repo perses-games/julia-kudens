@@ -8,6 +8,7 @@ import org.khronos.webgl.WebGLBuffer
 import org.khronos.webgl.WebGLRenderingContext
 import kotlin.js.Date
 import kotlin.js.Math
+import kotlin.js.Math.random
 
 /**
  * User: rnentjes
@@ -53,7 +54,7 @@ private val fragmentShader = """
         gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0);
 
         if (xx*xx + yy*yy < 4.0) {
-            for (int iteration = 0; iteration < 1000; iteration++) {
+            for (int iteration = 0; iteration < 10000; iteration++) {
                 if (xx*xx + yy*yy > 4.0 || iteration > u_max_iterations) {
                   float mu = float(iteration) + 1.0 - log(log(xx*xx + yy*yy)) / log(2.0);
                   //mu = sqrt(mu);
@@ -97,6 +98,9 @@ class Julia(val html: HTMLElements) {
     val attribBuffer: WebGLBuffer
     val vertices: Float32Array
     val start = Date().getTime()
+    val startX = random() - 0.5
+    val startY = random() - 0.5
+    val maxIterations = (16 + (random() * 48)).toInt()
 
     init {
         val array: Array<Float> = arrayOf(
@@ -134,19 +138,19 @@ class Julia(val html: HTMLElements) {
 
         var time = (start - (Date().getTime())) / 100.0
 
-//        data.juliaX = -0.391f + (Math.sin(time / 31) / 10f).toFloat()
-//        data.juliaY = -0.587f + (Math.cos(time / 23.07) / 10f).toFloat()
+        data.juliaX = (startX + (Math.sin(time / 31) / 10f)).toFloat()
+        data.juliaY = (startY + (Math.cos(time / 23.07) / 10f)).toFloat()
 
-//        data.juliaX = -0.79f + (Math.sin(time / 31) / 100f).toFloat()
-//        data.juliaY = 0.15f + (Math.cos(time / 23.07) / 100f).toFloat()
+        //data.juliaX += -0.79f + (Math.sin(time / 101) / 50f).toFloat()
+        //data.juliaY += 0.15f + (Math.cos(time / 97) / 50f).toFloat()
 
-        data.juliaX = 0.28f + (Math.sin(time / 31) / 1000f).toFloat()
-        data.juliaY = 0.008f + (Math.cos(time / 23.07) / 1000f).toFloat()
+        //data.juliaX += 0.28f + (Math.sin(time / 57) / 100f).toFloat()
+        //data.juliaY += 0.008f + (Math.cos(time / 53) / 100f).toFloat()
 
         data.scaleX = 1f //8f - Math.sin(time / 10.0).toFloat() * 0.5f
         data.scaleY = 1f / Game.view.aspectRatio //8f - Math.sin(time / 10.0).toFloat() * 0.5f
 
-        data.u_max_iterations = 250
+        data.u_max_iterations = maxIterations
 
         shaderProgram.begin(attribBuffer, data)
 

@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="empty-kudens_main" target="1.8" />
       <module name="empty-kudens_test" target="1.8" />
+      <module name="julia-kudens_main" target="1.8" />
+      <module name="julia-kudens_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
