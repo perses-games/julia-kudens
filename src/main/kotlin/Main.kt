@@ -40,7 +40,7 @@ fun main(args: Array<String>) {
     // set border color
     document.body?.style?.backgroundColor = "#000"
 
-    //Game.view.setToWidth(2000f)
+    Game.view.setToWidth(1920f)
     Game.view.drawMode = DrawMode.NEAREST
 
     Game.view.minAspectRatio = 0.5f
