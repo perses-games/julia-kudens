@@ -1,1 +1,1 @@
-A starter project for the [kudens](https://github.com/perses-games/kudens) game library.
+Here it is, your [random moment of zen](http://julia.perses.games).
