@@ -53,12 +53,13 @@ private val fragmentShader = """
         gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0);
 
         if (xx*xx + yy*yy < 4.0) {
-            for (int iteration = 0; iteration < 1000; iteration++) {
+            for (int iteration = 0; iteration < 2000; iteration++) {
                 if (xx*xx + yy*yy > 4.0 || iteration > u_max_iterations) {
                   float mu = float(iteration) + 1.0 - log(log(xx*xx + yy*yy)) / log(2.0);
                   //mu = sqrt(mu);
 
                   vec3 hsl = vec3(mod(mu * 7.0, float(u_max_iterations)) / float(u_max_iterations), 1.0, 0.75);
+                  //vec3 hsl = vec3(float(iteration) / float(u_max_iterations), 1.0, 0.75);
                   vec3 rgb = hsv2rgb(hsl);
 
                   //float it = mod(mu * 23.0, 768.0);
@@ -137,16 +138,16 @@ class Julia(val html: HTMLElements) {
 //        data.juliaX = -0.391f + (Math.sin(time / 31) / 10f).toFloat()
 //        data.juliaY = -0.587f + (Math.cos(time / 23.07) / 10f).toFloat()
 
-//        data.juliaX = -0.79f + (Math.sin(time / 31) / 100f).toFloat()
-//        data.juliaY = 0.15f + (Math.cos(time / 23.07) / 100f).toFloat()
+        data.juliaX = -0.79f + (Math.sin(time / 31) / 10f).toFloat()
+        data.juliaY = 0.15f + (Math.cos(time / 23.07) / 10f).toFloat()
 
-        data.juliaX = 0.28f + (Math.sin(time / 31) / 1000f).toFloat()
-        data.juliaY = 0.008f + (Math.cos(time / 23.07) / 1000f).toFloat()
+        //data.juliaX = 0.28f + (Math.sin(time / 31) / 1000f).toFloat()
+        //data.juliaY = 0.008f + (Math.cos(time / 23.07) / 1000f).toFloat()
 
         data.scaleX = 1f //8f - Math.sin(time / 10.0).toFloat() * 0.5f
         data.scaleY = 1f / Game.view.aspectRatio //8f - Math.sin(time / 10.0).toFloat() * 0.5f
 
-        data.u_max_iterations = 250
+        data.u_max_iterations = 2000
 
         shaderProgram.begin(attribBuffer, data)
 

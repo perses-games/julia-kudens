@@ -26,7 +26,7 @@ class JuliaScreen : Screen() {
     override fun render() {
         julia.render()
 
-        Texts.drawText(300f, Game.view.height / 2f, "Hello Kudens!", font = "bold 62pt Arial", fillStyle = "rgba(255,255,0,0.75)")
+        // Texts.drawText(300f, Game.view.height / 2f, "Hello Kudens!", font = "bold 62pt Arial", fillStyle = "rgba(255,255,0,0.75)")
     }
 
 }
@@ -35,7 +35,7 @@ fun main(args: Array<String>) {
     // set border color
     document.body?.style?.backgroundColor = "#000"
 
-    Game.view.setToWidth(1200f)
+    Game.view.setToWidth(3000f)
     Game.view.drawMode = DrawMode.LINEAR
 
     Game.view.minAspectRatio = 0.5f
