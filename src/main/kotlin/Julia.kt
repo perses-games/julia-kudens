@@ -37,6 +37,7 @@ private val fragmentShader = """
 
     uniform vec2 u_julia;
     uniform int u_max_iterations;
+    uniform float u_color_offset;
 
     varying vec2 v_coord;
 
@@ -50,6 +51,7 @@ private val fragmentShader = """
         float xx = v_coord.x;
         float yy = v_coord.y;
         float xt = 0.0;
+        float sc = xx*xx + yy*yy;
 
         gl_FragColor = vec4( 0.0, 0.0, 0.0, 1.0);
 
@@ -58,8 +60,9 @@ private val fragmentShader = """
                 if (xx*xx + yy*yy > 4.0 || iteration > u_max_iterations) {
                   float mu = float(iteration) + 1.0 - log(log(xx*xx + yy*yy)) / log(2.0);
                   //mu = sqrt(mu);
+                  float ci = sc / float(u_max_iterations);
 
-                  vec3 hsl = vec3(mod(mu * 7.0, float(u_max_iterations)) / float(u_max_iterations), 1.0, 0.75);
+                  vec3 hsl = vec3(mod(u_color_offset + mu * 13.0, float(u_max_iterations)) / float(u_max_iterations), 1.0, 0.75);
                   vec3 rgb = hsv2rgb(hsl);
 
                   //float it = mod(mu * 23.0, 768.0);
@@ -74,6 +77,7 @@ private val fragmentShader = """
                 xt = xx*xx - yy*yy + u_julia.x;
                 yy = 2.0*xx*yy + u_julia.y;
                 xx = xt;
+                sc += xx*xx + yy*yy;
             }
         }
     }
@@ -88,7 +92,8 @@ class JuliaData {
     var scaleX: Float = 1f
     var scaleY: Float = 1f
 
-    var u_max_iterations: Int = 25
+    var max_iterations: Int = 25
+    var color_offset: Float = 0f
 }
 
 class Julia(val html: HTMLElements) {
@@ -101,6 +106,7 @@ class Julia(val html: HTMLElements) {
     val startX = random() - 0.5
     val startY = random() - 0.5
     val maxIterations = (16 + (random() * 48)).toInt()
+    var time = 0.0
 
     init {
         val array: Array<Float> = arrayOf(
@@ -118,7 +124,8 @@ class Julia(val html: HTMLElements) {
         val setter = { program: ShaderProgram<JuliaData>, data: JuliaData ->
             program.setUniform2f("u_julia", data.juliaX, data.juliaY)
             program.setUniform4f("u_viewWindow", data.offsetX, data.offsetY, data.scaleX, data.scaleY)
-            program.setUniform1i("u_max_iterations", data.u_max_iterations)
+            program.setUniform1i("u_max_iterations", data.max_iterations)
+            program.setUniform1f("u_color_offset", data.color_offset)
         }
 
         val vainfo = arrayOf(
@@ -132,14 +139,18 @@ class Julia(val html: HTMLElements) {
         webgl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, attribBuffer);
     }
 
+    fun update(delta: Float) {
+        this.time += delta.toDouble()
+
+        data.color_offset -= 6f * delta
+    }
+
     fun render() {
         webgl.clearColor(1f, 1f, 1f, 1f)
         webgl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT)
 
-        var time = (start - (Date().getTime())) / 100.0
-
-        data.juliaX = (startX + (Math.sin(time / 31) / 10f)).toFloat()
-        data.juliaY = (startY + (Math.cos(time / 23.07) / 10f)).toFloat()
+        data.juliaX = (startX + Math.sin(time / 5.0) / 5f).toFloat()
+        data.juliaY = (startY + Math.cos(time / 7.0) / 5f).toFloat()
 
         //data.juliaX += -0.79f + (Math.sin(time / 101) / 50f).toFloat()
         //data.juliaY += 0.15f + (Math.cos(time / 97) / 50f).toFloat()
@@ -150,7 +161,7 @@ class Julia(val html: HTMLElements) {
         data.scaleX = 1f //8f - Math.sin(time / 10.0).toFloat() * 0.5f
         data.scaleY = 1f / Game.view.aspectRatio //8f - Math.sin(time / 10.0).toFloat() * 0.5f
 
-        data.u_max_iterations = maxIterations
+        data.max_iterations = maxIterations
 
         shaderProgram.begin(attribBuffer, data)
 

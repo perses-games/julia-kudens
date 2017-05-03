@@ -25,6 +25,8 @@ class JuliaScreen : Screen() {
 
     override fun update(time: Float, delta: Float) {
         this.time = time
+
+        julia.update(delta)
     }
 
     override fun render() {
